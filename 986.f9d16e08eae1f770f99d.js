@@ -651,19 +651,20 @@ exports["default"] = function () {
 /* harmony export */   "c": function() { return /* binding */ Trans; }
 /* harmony export */ });
 /* unused harmony export nodesToString */
-/* harmony import */ var _babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5987);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1002);
+/* harmony import */ var _babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5987);
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1002);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4942);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7294);
-/* harmony import */ var html_parse_stringify2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7725);
-/* harmony import */ var html_parse_stringify2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(html_parse_stringify2__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8718);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8236);
+/* harmony import */ var html_parse_stringify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1613);
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7031);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8236);
 
 
 
+var _excluded = ["format"],
+    _excluded2 = ["children", "count", "parent", "i18nKey", "context", "tOptions", "values", "defaults", "components", "ns", "i18n", "t", "shouldUnescape"];
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -681,13 +682,13 @@ function hasChildren(node, checkLength) {
 
 function getChildren(node) {
   if (!node) return [];
-  return node && node.children ? node.children : node.props && node.props.children;
+  return node.props ? node.props.children : node.children;
 }
 
 function hasValidReactChildren(children) {
   if (Object.prototype.toString.call(children) !== '[object Array]') return false;
   return children.every(function (child) {
-    return react__WEBPACK_IMPORTED_MODULE_1__.isValidElement(child);
+    return (0,react__WEBPACK_IMPORTED_MODULE_1__.isValidElement)(child);
   });
 }
 
@@ -706,11 +707,11 @@ function nodesToString(children, i18nOptions) {
   if (!children) return '';
   var stringNode = '';
   var childrenArray = getAsArray(children);
-  var keepArray = i18nOptions.transKeepBasicHtmlNodesFor || [];
+  var keepArray = i18nOptions.transSupportBasicHtmlNodes && i18nOptions.transKeepBasicHtmlNodesFor ? i18nOptions.transKeepBasicHtmlNodesFor : [];
   childrenArray.forEach(function (child, childIndex) {
     if (typeof child === 'string') {
       stringNode += "".concat(child);
-    } else if (react__WEBPACK_IMPORTED_MODULE_1__.isValidElement(child)) {
+    } else if ((0,react__WEBPACK_IMPORTED_MODULE_1__.isValidElement)(child)) {
       var childPropsCount = Object.keys(child.props).length;
       var shouldKeepChild = keepArray.indexOf(child.type) > -1;
       var childChildren = child.props.children;
@@ -727,9 +728,11 @@ function nodesToString(children, i18nOptions) {
         var content = nodesToString(childChildren, i18nOptions);
         stringNode += "<".concat(childIndex, ">").concat(content, "</").concat(childIndex, ">");
       }
-    } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(child) === 'object') {
+    } else if (child === null) {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_3__/* .warn */ .ZK)("Trans: the passed in value is invalid - seems you passed in a null child.");
+    } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(child) === 'object') {
       var format = child.format,
-          clone = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(child, ["format"]);
+          clone = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)(child, _excluded);
 
       var keys = Object.keys(clone);
 
@@ -737,16 +740,16 @@ function nodesToString(children, i18nOptions) {
         var value = format ? "".concat(keys[0], ", ").concat(format) : keys[0];
         stringNode += "{{".concat(value, "}}");
       } else {
-        (0,_utils__WEBPACK_IMPORTED_MODULE_5__/* .warn */ .ZK)("react-i18next: the passed in object contained more than one variable - the object should look like {{ value, format }} where format is optional.", child);
+        (0,_utils__WEBPACK_IMPORTED_MODULE_3__/* .warn */ .ZK)("react-i18next: the passed in object contained more than one variable - the object should look like {{ value, format }} where format is optional.", child);
       }
     } else {
-      (0,_utils__WEBPACK_IMPORTED_MODULE_5__/* .warn */ .ZK)("Trans: the passed in value is invalid - seems you passed in a variable like {number} - please pass in variables for interpolation as full objects like {{number}}.", child);
+      (0,_utils__WEBPACK_IMPORTED_MODULE_3__/* .warn */ .ZK)("Trans: the passed in value is invalid - seems you passed in a variable like {number} - please pass in variables for interpolation as full objects like {{number}}.", child);
     }
   });
   return stringNode;
 }
 
-function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
+function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts, shouldUnescape) {
   if (targetString === '') return [];
   var keepArray = i18nOptions.transKeepBasicHtmlNodesFor || [];
   var emptyChildrenButNeedsHandling = targetString && new RegExp(keepArray.join('|')).test(targetString);
@@ -757,13 +760,14 @@ function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
     var childrenArray = getAsArray(childs);
     childrenArray.forEach(function (child) {
       if (typeof child === 'string') return;
-      if (hasChildren(child)) getData(getChildren(child));else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(child) === 'object' && !react__WEBPACK_IMPORTED_MODULE_1__.isValidElement(child)) Object.assign(data, child);
+      if (hasChildren(child)) getData(getChildren(child));else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(child) === 'object' && !(0,react__WEBPACK_IMPORTED_MODULE_1__.isValidElement)(child)) Object.assign(data, child);
     });
   }
 
   getData(children);
-  var interpolatedString = i18n.services.interpolator.interpolate(targetString, _objectSpread(_objectSpread({}, data), combinedTOpts), i18n.language);
-  var ast = html_parse_stringify2__WEBPACK_IMPORTED_MODULE_2___default().parse("<0>".concat(interpolatedString, "</0>"));
+  var ast = html_parse_stringify__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parse */ .Z.parse("<0>".concat(targetString, "</0>"));
+
+  var opts = _objectSpread(_objectSpread({}, data), combinedTOpts);
 
   function renderInner(child, node, rootReactNode) {
     var childs = getChildren(child);
@@ -773,7 +777,7 @@ function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
 
   function pushTranslatedJSX(child, inner, mem, i, isVoid) {
     if (child.dummy) child.children = inner;
-    mem.push(react__WEBPACK_IMPORTED_MODULE_1__.cloneElement(child, _objectSpread(_objectSpread({}, child.props), {}, {
+    mem.push((0,react__WEBPACK_IMPORTED_MODULE_1__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
       key: i
     }), isVoid ? undefined : inner));
   }
@@ -782,7 +786,7 @@ function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
     var reactNodes = getAsArray(reactNode);
     var astNodes = getAsArray(astNode);
     return astNodes.reduce(function (mem, node, i) {
-      var translationContent = node.children && node.children[0] && node.children[0].content;
+      var translationContent = node.children && node.children[0] && node.children[0].content && i18n.services.interpolator.interpolate(node.children[0].content, opts, i18n.language);
 
       if (node.type === 'tag') {
         var tmp = reactNodes[parseInt(node.name, 10)];
@@ -791,20 +795,21 @@ function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
         var child = Object.keys(node.attrs).length !== 0 ? mergeProps({
           props: node.attrs
         }, tmp) : tmp;
-        var isElement = react__WEBPACK_IMPORTED_MODULE_1__.isValidElement(child);
+        var isElement = (0,react__WEBPACK_IMPORTED_MODULE_1__.isValidElement)(child);
         var isValidTranslationWithChildren = isElement && hasChildren(node, true) && !node.voidElement;
-        var isEmptyTransWithHTML = emptyChildrenButNeedsHandling && (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(child) === 'object' && child.dummy && !isElement;
-        var isKnownComponent = (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(children) === 'object' && children !== null && Object.hasOwnProperty.call(children, node.name);
+        var isEmptyTransWithHTML = emptyChildrenButNeedsHandling && (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(child) === 'object' && child.dummy && !isElement;
+        var isKnownComponent = (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(children) === 'object' && children !== null && Object.hasOwnProperty.call(children, node.name);
 
         if (typeof child === 'string') {
-          mem.push(child);
+          var value = i18n.services.interpolator.interpolate(child, opts, i18n.language);
+          mem.push(value);
         } else if (hasChildren(child) || isValidTranslationWithChildren) {
             var inner = renderInner(child, node, rootReactNode);
             pushTranslatedJSX(child, inner, mem, i);
           } else if (isEmptyTransWithHTML) {
           var _inner = mapAST(reactNodes, node.children, rootReactNode);
 
-          mem.push(react__WEBPACK_IMPORTED_MODULE_1__.cloneElement(child, _objectSpread(_objectSpread({}, child.props), {}, {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_1__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
             key: i
           }), _inner));
         } else if (Number.isNaN(parseFloat(node.name))) {
@@ -814,13 +819,13 @@ function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
             pushTranslatedJSX(child, _inner2, mem, i, node.voidElement);
           } else if (i18nOptions.transSupportBasicHtmlNodes && keepArray.indexOf(node.name) > -1) {
             if (node.voidElement) {
-              mem.push(react__WEBPACK_IMPORTED_MODULE_1__.createElement(node.name, {
+              mem.push((0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(node.name, {
                 key: "".concat(node.name, "-").concat(i)
               }));
             } else {
               var _inner3 = mapAST(reactNodes, node.children, rootReactNode);
 
-              mem.push(react__WEBPACK_IMPORTED_MODULE_1__.createElement(node.name, {
+              mem.push((0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(node.name, {
                 key: "".concat(node.name, "-").concat(i)
               }, _inner3));
             }
@@ -831,20 +836,30 @@ function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
 
             mem.push("<".concat(node.name, ">").concat(_inner4, "</").concat(node.name, ">"));
           }
-        } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(child) === 'object' && !isElement) {
+        } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(child) === 'object' && !isElement) {
           var content = node.children[0] ? translationContent : null;
           if (content) mem.push(content);
         } else if (node.children.length === 1 && translationContent) {
-          mem.push(react__WEBPACK_IMPORTED_MODULE_1__.cloneElement(child, _objectSpread(_objectSpread({}, child.props), {}, {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_1__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
             key: i
           }), translationContent));
         } else {
-          mem.push(react__WEBPACK_IMPORTED_MODULE_1__.cloneElement(child, _objectSpread(_objectSpread({}, child.props), {}, {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_1__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
             key: i
           })));
         }
       } else if (node.type === 'text') {
-        mem.push(node.content);
+        var wrapTextNodes = i18nOptions.transWrapTextNodes;
+
+        var _content = shouldUnescape ? i18nOptions.unescape(i18n.services.interpolator.interpolate(node.content, opts, i18n.language)) : i18n.services.interpolator.interpolate(node.content, opts, i18n.language);
+
+        if (wrapTextNodes) {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(wrapTextNodes, {
+            key: "".concat(node.name, "-").concat(i)
+          }, _content));
+        } else {
+          mem.push(_content);
+        }
       }
 
       return mem;
@@ -853,7 +868,7 @@ function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts) {
 
   var result = mapAST([{
     dummy: true,
-    children: children
+    children: children || []
   }], ast, getAsArray(children || []));
   return getChildren(result[0]);
 }
@@ -863,6 +878,7 @@ function Trans(_ref) {
       count = _ref.count,
       parent = _ref.parent,
       i18nKey = _ref.i18nKey,
+      context = _ref.context,
       _ref$tOptions = _ref.tOptions,
       tOptions = _ref$tOptions === void 0 ? {} : _ref$tOptions,
       values = _ref.values,
@@ -871,7 +887,8 @@ function Trans(_ref) {
       ns = _ref.ns,
       i18nFromProps = _ref.i18n,
       tFromProps = _ref.t,
-      additionalProps = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(_ref, ["children", "count", "parent", "i18nKey", "tOptions", "values", "defaults", "components", "ns", "i18n", "t"]);
+      shouldUnescape = _ref.shouldUnescape,
+      additionalProps = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)(_ref, _excluded2);
 
   var _ref2 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_context__WEBPACK_IMPORTED_MODULE_6__/* .I18nContext */ .OO) || {},
       i18nFromContext = _ref2.i18n,
@@ -880,13 +897,15 @@ function Trans(_ref) {
   var i18n = i18nFromProps || i18nFromContext || (0,_context__WEBPACK_IMPORTED_MODULE_6__/* .getI18n */ .nI)();
 
   if (!i18n) {
-    (0,_utils__WEBPACK_IMPORTED_MODULE_5__/* .warnOnce */ .O4)('You will need to pass in an i18next instance by using i18nextReactModule');
+    (0,_utils__WEBPACK_IMPORTED_MODULE_3__/* .warnOnce */ .O4)('You will need to pass in an i18next instance by using i18nextReactModule');
     return children;
   }
 
   var t = tFromProps || i18n.t.bind(i18n) || function (k) {
     return k;
   };
+
+  if (context) tOptions.context = context;
 
   var reactI18nextOptions = _objectSpread(_objectSpread({}, (0,_context__WEBPACK_IMPORTED_MODULE_6__/* .getDefaults */ .JP)()), i18n.options && i18n.options.react);
 
@@ -910,35 +929,77 @@ function Trans(_ref) {
   });
 
   var translation = key ? t(key, combinedTOpts) : defaultValue;
-  var content = renderNodes(components || children, translation, i18n, reactI18nextOptions, combinedTOpts);
+  var content = renderNodes(components || children, translation, i18n, reactI18nextOptions, combinedTOpts, shouldUnescape);
   var useAsParent = parent !== undefined ? parent : reactI18nextOptions.defaultTransParent;
-  return useAsParent ? react__WEBPACK_IMPORTED_MODULE_1__.createElement(useAsParent, additionalProps, content) : content;
+  return useAsParent ? (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(useAsParent, additionalProps, content) : content;
 }
 
 /***/ }),
 
-/***/ 8718:
+/***/ 7031:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Db": function() { return /* binding */ initReactI18next; },
-/* harmony export */   "JP": function() { return /* binding */ getDefaults; },
-/* harmony export */   "OO": function() { return /* binding */ I18nContext; },
-/* harmony export */   "nI": function() { return /* binding */ getI18n; },
-/* harmony export */   "zv": function() { return /* binding */ ReportNamespaces; }
-/* harmony export */ });
-/* unused harmony exports setDefaults, setI18n, composeInitialProps, getInitialProps */
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5671);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3144);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4942);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7294);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "OO": function() { return /* binding */ I18nContext; },
+  "zv": function() { return /* binding */ ReportNamespaces; },
+  "JP": function() { return /* binding */ getDefaults; },
+  "nI": function() { return /* binding */ getI18n; },
+  "Db": function() { return /* binding */ initReactI18next; }
+});
+
+// UNUSED EXPORTS: composeInitialProps, getInitialProps, setDefaults, setI18n
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(5671);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(3144);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(4942);
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(7294);
+;// CONCATENATED MODULE: ./node_modules/react-i18next/dist/es/unescape.js
+var matchHtmlEntity = /&(?:amp|#38|lt|#60|gt|#62|apos|#39|quot|#34|nbsp|#160|copy|#169|reg|#174|hellip|#8230|#x2F|#47);/g;
+var htmlEntities = {
+  '&amp;': '&',
+  '&#38;': '&',
+  '&lt;': '<',
+  '&#60;': '<',
+  '&gt;': '>',
+  '&#62;': '>',
+  '&apos;': "'",
+  '&#39;': "'",
+  '&quot;': '"',
+  '&#34;': '"',
+  '&nbsp;': ' ',
+  '&#160;': ' ',
+  '&copy;': '©',
+  '&#169;': '©',
+  '&reg;': '®',
+  '&#174;': '®',
+  '&hellip;': '…',
+  '&#8230;': '…',
+  '&#x2F;': '/',
+  '&#47;': '/'
+};
+
+var unescapeHtmlEntity = function unescapeHtmlEntity(m) {
+  return htmlEntities[m];
+};
+
+var unescape_unescape = function unescape(text) {
+  return text.replace(matchHtmlEntity, unescapeHtmlEntity);
+};
+;// CONCATENATED MODULE: ./node_modules/react-i18next/dist/es/context.js
 
 
 
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,defineProperty/* default */.Z)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 
 
 var defaultOptions = {
@@ -946,11 +1007,13 @@ var defaultOptions = {
   bindI18nStore: '',
   transEmptyNodeValue: '',
   transSupportBasicHtmlNodes: true,
+  transWrapTextNodes: '',
   transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'p'],
-  useSuspense: true
+  useSuspense: true,
+  unescape: unescape_unescape
 };
 var i18nInstance;
-var I18nContext = react__WEBPACK_IMPORTED_MODULE_1__.createContext();
+var I18nContext = (0,react.createContext)();
 function setDefaults() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   defaultOptions = _objectSpread(_objectSpread({}, defaultOptions), options);
@@ -960,12 +1023,12 @@ function getDefaults() {
 }
 var ReportNamespaces = function () {
   function ReportNamespaces() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)(this, ReportNamespaces);
+    (0,classCallCheck/* default */.Z)(this, ReportNamespaces);
 
     this.usedNamespaces = {};
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(ReportNamespaces, [{
+  (0,createClass/* default */.Z)(ReportNamespaces, [{
     key: "addUsedNamespaces",
     value: function addUsedNamespaces(namespaces) {
       var _this = this;
@@ -1038,17 +1101,26 @@ function getInitialProps() {
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8152);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4942);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7294);
-/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8718);
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7031);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8236);
 
 
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 
 
+
+
+var usePrevious = function usePrevious(value, ignore) {
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    ref.current = ignore ? ref.current : value;
+  }, [value, ignore]);
+  return ref.current;
+};
 
 function useTranslation(ns) {
   var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -1075,9 +1147,12 @@ function useTranslation(ns) {
     return retNotReady;
   }
 
+  if (i18n.options.react && i18n.options.react.wait !== undefined) (0,_utils__WEBPACK_IMPORTED_MODULE_3__/* .warnOnce */ .O4)('It seems you are still using the old wait option, you may migrate to the new useSuspense behaviour.');
+
   var i18nOptions = _objectSpread(_objectSpread(_objectSpread({}, (0,_context__WEBPACK_IMPORTED_MODULE_2__/* .getDefaults */ .JP)()), i18n.options.react), props);
 
-  var useSuspense = i18nOptions.useSuspense;
+  var useSuspense = i18nOptions.useSuspense,
+      keyPrefix = i18nOptions.keyPrefix;
   var namespaces = ns || defaultNSFromContext || i18n.options && i18n.options.defaultNS;
   namespaces = typeof namespaces === 'string' ? [namespaces] : namespaces || ['translation'];
   if (i18n.reportNamespaces.addUsedNamespaces) i18n.reportNamespaces.addUsedNamespaces(namespaces);
@@ -1086,16 +1161,16 @@ function useTranslation(ns) {
   });
 
   function getT() {
-    return {
-      t: i18n.getFixedT(null, i18nOptions.nsMode === 'fallback' ? namespaces : namespaces[0])
-    };
+    return i18n.getFixedT(null, i18nOptions.nsMode === 'fallback' ? namespaces : namespaces[0], keyPrefix);
   }
 
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(getT()),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(getT),
       _useState2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(_useState, 2),
       t = _useState2[0],
       setT = _useState2[1];
 
+  var joinedNS = namespaces.join();
+  var previousJoinedNS = usePrevious(joinedNS);
   var isMounted = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(true);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var bindI18n = i18nOptions.bindI18n,
@@ -1104,12 +1179,16 @@ function useTranslation(ns) {
 
     if (!ready && !useSuspense) {
       (0,_utils__WEBPACK_IMPORTED_MODULE_3__/* .loadNamespaces */ .DC)(i18n, namespaces, function () {
-        if (isMounted.current) setT(getT());
+        if (isMounted.current) setT(getT);
       });
     }
 
+    if (ready && previousJoinedNS && previousJoinedNS !== joinedNS && isMounted.current) {
+      setT(getT);
+    }
+
     function boundReset() {
-      if (isMounted.current) setT(getT());
+      if (isMounted.current) setT(getT);
     }
 
     if (bindI18n && i18n) i18n.on(bindI18n, boundReset);
@@ -1123,9 +1202,17 @@ function useTranslation(ns) {
         return i18n.store.off(e, boundReset);
       });
     };
-  }, [namespaces.join()]);
-  var ret = [t.t, i18n, ready];
-  ret.t = t.t;
+  }, [i18n, joinedNS]);
+  var isInitial = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(true);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (isMounted.current && !isInitial.current) {
+      setT(getT);
+    }
+
+    isInitial.current = false;
+  }, [i18n, keyPrefix]);
+  var ret = [t, i18n, ready];
+  ret.t = t;
   ret.i18n = i18n;
   ret.ready = ready;
   if (ready) return ret;
@@ -1188,14 +1275,9 @@ function loadNamespaces(i18n, ns, cb) {
     }
   });
 }
-function hasLoadedNamespace(ns, i18n) {
+
+function oldI18nextHasLoadedNamespace(ns, i18n) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-  if (!i18n.languages || !i18n.languages.length) {
-    warnOnce('i18n.languages were undefined or empty', i18n.languages);
-    return true;
-  }
-
   var lng = i18n.languages[0];
   var fallbackLng = i18n.options ? i18n.options.fallbackLng : false;
   var lastLng = i18n.languages[i18n.languages.length - 1];
@@ -1208,9 +1290,30 @@ function hasLoadedNamespace(ns, i18n) {
 
   if (options.bindI18n && options.bindI18n.indexOf('languageChanging') > -1 && i18n.services.backendConnector.backend && i18n.isLanguageChangingTo && !loadNotPending(i18n.isLanguageChangingTo, ns)) return false;
   if (i18n.hasResourceBundle(lng, ns)) return true;
-  if (!i18n.services.backendConnector.backend) return true;
+  if (!i18n.services.backendConnector.backend || i18n.options.resources && !i18n.options.partialBundledLanguages) return true;
   if (loadNotPending(lng, ns) && (!fallbackLng || loadNotPending(lastLng, ns))) return true;
   return false;
+}
+
+function hasLoadedNamespace(ns, i18n) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+  if (!i18n.languages || !i18n.languages.length) {
+    warnOnce('i18n.languages were undefined or empty', i18n.languages);
+    return true;
+  }
+
+  var isNewerI18next = i18n.options.ignoreJSONStructure !== undefined;
+
+  if (!isNewerI18next) {
+    return oldI18nextHasLoadedNamespace(ns, i18n, options);
+  }
+
+  return i18n.hasLoadedNamespace(ns, {
+    precheck: function precheck(i18nInstance, loadNotPending) {
+      if (options.bindI18n && options.bindI18n.indexOf('languageChanging') > -1 && i18nInstance.services.backendConnector.backend && i18nInstance.isLanguageChangingTo && !loadNotPending(i18nInstance.isLanguageChangingTo, ns)) return false;
+    }
+  });
 }
 function getDisplayName(Component) {
   return Component.displayName || Component.name || (typeof Component === 'string' && Component.length > 0 ? Component : 'Unknown');
@@ -3404,4 +3507,4 @@ if (true) {
 /***/ })
 
 }]);
-//# sourceMappingURL=986.586e6f1fffa7f66afebe.js.map
+//# sourceMappingURL=986.f9d16e08eae1f770f99d.js.map

@@ -817,8 +817,8 @@ var App = function App() {
     })]
   });
 };
-// EXTERNAL MODULE: ./node_modules/react-i18next/dist/es/context.js
-var context = __webpack_require__(8718);
+// EXTERNAL MODULE: ./node_modules/react-i18next/dist/es/context.js + 1 modules
+var context = __webpack_require__(7031);
 ;// CONCATENATED MODULE: ./src/site/locales/en/app.json
 var locales_en_app_namespaceObject = JSON.parse('{"app":{"title":"Gerador e validador de CPF Open-Source | Tiago Porto","description":"Gerador e validador de CPF, open-source JS lib to generate and validate CPF.","keywords":"cpf,gerar,gerador,generator,generates,validador,valida,validates,online"},"header":{"libInfo":"JS open-source lib to generate and validate CPF.","projectPageGithub":"Github project page"},"validate":{"title":"Validate","insertCPF":"Insert CPF"},"generate":{"title":"Generate","cpfGenerated":"Generated CPF"},"info":{"algorithm":"Implements the follow <0>algorithm</0>.","disclaimer":"Lib available to assist developers in software testing, doesn\'t have link with \\"Receita Federal do Brasil\\".","cpfByState":"The last digit before verifiers (last 2 digits), corresponds with the brasilian state were CPF was issued.","codeByState":"Code by brasilian states:","example":"Example: CPF <0>XXX.XXX.XX8-XX</0>, number 8 corresponds to São Paulo state.","stateCode1":"1. Distrito Federal, Goiás, Mato Grosso do Sul and Tocantins;","stateCode2":"2. Pará, Amazonas, Acre, Amapá, Rondônia and Roraima;","stateCode3":"3. Ceará, Maranhão and Piauí;","stateCode4":"4. Pernambuco, Rio Grande do Norte, Paraíba and Alagoas;","stateCode5":"5. Bahia and Sergipe;","stateCode6":"6. Minas Gerais;","stateCode7":"7. Rio de Janeiro and Espírito Santo;","stateCode8":"8. São Paulo;","stateCode9":"9. Paraná and Santa Catarina;","stateCode10":"0. Rio Grande do Sul.","disclaimerValidCPF":"Valid CPF doesn\'t mean is registered or is active. For those informations, check <0>Secretaria da Receita Federal do Brasil</0>."},"donate":{"leaveStar":"Leave a ★","contributePaypal":"Contribute (Paypal)","contributeBitcoin":"Contribute (bitcoin)"},"messages":{"copied":"Copied!","cpfCopied":"CPF Copied!","validCPF":"CPF Valid","invalidCPF":"CPF Invalid","walletCopied":"Wallet copied!","incomplete":"incomplete"}}');
 ;// CONCATENATED MODULE: ./src/site/locales/br/app.json
@@ -905,7 +905,6 @@ i18next/* default.use */.Z.use(context/* initReactI18next */.Db).init({
   fallbackLng: 'br'
 });
 react_dom.render( /*#__PURE__*/(0,jsx_runtime.jsx)(App, {}), document.querySelector('#root'));
-if (false) {}
 
 /***/ })
 
@@ -1219,13 +1218,13 @@ if (false) {}
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, [800,171,986], function() { return __webpack_require__(5743); })
-/******/ 	__webpack_require__.O(undefined, [800,171,986], function() { return __webpack_require__(4048); })
-/******/ 	__webpack_require__.O(undefined, [800,171,986], function() { return __webpack_require__(1532); })
-/******/ 	__webpack_require__.O(undefined, [800,171,986], function() { return __webpack_require__(189); })
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [800,171,986], function() { return __webpack_require__(8336); })
+/******/ 	__webpack_require__.O(undefined, [800,33,986], function() { return __webpack_require__(5743); })
+/******/ 	__webpack_require__.O(undefined, [800,33,986], function() { return __webpack_require__(4048); })
+/******/ 	__webpack_require__.O(undefined, [800,33,986], function() { return __webpack_require__(1532); })
+/******/ 	__webpack_require__.O(undefined, [800,33,986], function() { return __webpack_require__(189); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [800,33,986], function() { return __webpack_require__(8336); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=index.2a921cacb21c3c93396b.js.map
+//# sourceMappingURL=index.e88f6d144aef3dcda480.js.map
